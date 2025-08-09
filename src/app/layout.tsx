@@ -5,7 +5,7 @@ import "./globals.css";
 const Poppins = localFont({
   src: "./fonts/poppins-light-webfont.woff2",
   variable: "--font-geist-poppins",
-  weight: "100 200 300 400 500 600 800 900",
+  weight: "100 200 300 400 500 600 700 800 900",
 });
 
 export const metadata: Metadata = {
@@ -19,7 +19,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-br">
+    <html lang="pt-BR">
       <body className={`${Poppins.variable}  antialiased`}>{children}</body>
     </html>
   );
