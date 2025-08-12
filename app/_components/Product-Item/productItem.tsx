@@ -5,6 +5,7 @@ import {
 import { Prisma } from "@/app/generated/prisma";
 import { ArrowDownIcon } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 interface ProductItemProps {
   product: Prisma.ProductGetPayload<{
@@ -20,42 +21,44 @@ interface ProductItemProps {
 
 const ProductItem = ({ product }: ProductItemProps) => {
   return (
-    <div className="w-[150px] space-y-2">
-      <div className="relative h-[150px] w-full min-w-[150px]">
-        <Image
-          src={product.imageUrl}
-          alt={product.name}
-          fill
-          className="rounded-lg object-cover shadow-md"
-        />
+    <Link href={`/products/${product.id}`} className="w-[150px] space-y-2">
+      <div className="w-[150px] space-y-2">
+        <div className="relative h-[150px] w-full min-w-[150px]">
+          <Image
+            src={product.imageUrl}
+            alt={product.name}
+            fill
+            className="rounded-lg object-cover shadow-md"
+          />
 
-        {product.discountPercentage && (
-          <div className="absolute left-2 top-2 flex items-center gap-[2px] rounded-xl bg-primary px-2 py-[2px] text-white">
-            <ArrowDownIcon size={12} />
-            <span className="text-xs font-semibold">
-              {product.discountPercentage}%
-            </span>
-          </div>
-        )}
-      </div>
-
-      <div>
-        <h2 className="truncate text-sm font-normal">{product.name}</h2>
-        <div className="flex items-center gap-1">
-          <h1 className="font-semibold">
-            {formatCurrency(Number(calculateProductTotalPrice(product)))}
-          </h1>
-          {product.discountPercentage > 0 && (
-            <span className="text-sm text-muted-foreground line-through">
-              {formatCurrency(Number(product.price))}
-            </span>
+          {product.discountPercentage && (
+            <div className="absolute left-2 top-2 flex items-center gap-[2px] rounded-xl bg-primary px-2 py-[2px] text-white">
+              <ArrowDownIcon size={12} />
+              <span className="text-xs font-semibold">
+                {product.discountPercentage}%
+              </span>
+            </div>
           )}
         </div>
-        <h3 className="block text-sm text-muted-foreground">
-          {product.restaurant.name}
-        </h3>
+
+        <div>
+          <h2 className="truncate text-sm font-normal">{product.name}</h2>
+          <div className="flex items-center gap-1">
+            <h1 className="font-semibold">
+              {formatCurrency(Number(calculateProductTotalPrice(product)))}
+            </h1>
+            {product.discountPercentage > 0 && (
+              <span className="text-sm text-muted-foreground line-through">
+                {formatCurrency(Number(product.price))}
+              </span>
+            )}
+          </div>
+          <h3 className="block text-sm text-muted-foreground">
+            {product.restaurant.name}
+          </h3>
+        </div>
       </div>
-    </div>
+    </Link>
   );
 };
 
