@@ -43,7 +43,6 @@ const ProductsPage = async ({ params }: ProductsPageProps) => {
   return (
     <div>
       <ProductImage product={product} />
-      {/*  */}
       <ProductDetails product={product} complementaryProducts={juices} />
     </div>
   );

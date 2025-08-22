@@ -138,6 +138,12 @@ const ProductDetails = ({
         <h3 className="text-lg font-semibold">Sucos</h3>
         <ProductListComponent products={complementaryProducts} />
       </div>
+
+      <div className="mt-6 px-5">
+        <Button className="w-full py-2 font-semibold">
+          Adicionar à Sacola
+        </Button>
+      </div>
     </div>
   );
 };
