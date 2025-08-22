@@ -102,32 +102,37 @@ const ProductDetails = ({
         </div>
       </div>
       {/* Entrega */}
-      <Card className="mt-6 flex items-center justify-around py-3">
-        {/* Esquerda */}
-        <div className="items-center">
-          <div className="flex items-center gap-1">
-            <span className="text-sm text-muted-foreground">Entrega</span>
-            <BikeIcon className="text-muted-foreground" size={14} />
+      <div className="px-5">
+        <Card className="mt-6 flex items-center justify-around py-3">
+          {/* Esquerda */}
+          <div className="items-center">
+            <div className="flex items-center gap-1">
+              <span className="text-sm text-muted-foreground">Entrega</span>
+              <BikeIcon className="text-muted-foreground" size={14} />
+            </div>
+            {Number(product.restaurant.deliveryFee) > 0 ? (
+              <p className="text-sm font-semibold">
+                {formatCurrency(Number(product.restaurant.deliveryFee))}
+              </p>
+            ) : (
+              <p className="text-sm">Grátis</p>
+            )}
           </div>
-          {Number(product.restaurant.deliveryFee) > 0 ? (
+          {/* Direita */}
+          <div className="items-center">
+            <div className="flex items-center gap-1">
+              <span className="text-sm text-muted-foreground">Entrega</span>
+              <ClockIcon
+                size={14}
+                className="text-bold text-muted-foreground"
+              />
+            </div>
             <p className="text-sm font-semibold">
-              {formatCurrency(Number(product.restaurant.deliveryFee))}
+              {product.restaurant.deliveryTimeMinutes} min
             </p>
-          ) : (
-            <p className="text-sm">Grátis</p>
-          )}
-        </div>
-        {/* Direita */}
-        <div className="items-center">
-          <div className="flex items-center gap-1">
-            <span className="text-sm text-muted-foreground">Entrega</span>
-            <ClockIcon size={14} className="text-bold text-muted-foreground" />
           </div>
-          <p className="text-sm font-semibold">
-            {product.restaurant.deliveryTimeMinutes} min
-          </p>
-        </div>
-      </Card>
+        </Card>
+      </div>
 
       <div className="mt-6 space-y-2">
         <h3 className="text-lg font-semibold">Sobre</h3>
