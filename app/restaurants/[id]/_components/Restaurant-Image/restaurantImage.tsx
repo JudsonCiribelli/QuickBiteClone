@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "@/app/_components/ui/button";
 import { Restaurant } from "@/app/generated/prisma";
-import { ChevronLeftIcon } from "lucide-react";
+import { ChevronLeftIcon, HeartIcon } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 interface RestaurantImageProps {
@@ -15,7 +15,7 @@ const RestaurantImage = ({ restaurant }: RestaurantImageProps) => {
     router.back();
   };
   return (
-    <div className="relative h-[360px] w-full">
+    <div className="relative h-[260px] w-full">
       <Image
         src={restaurant.imageUrl}
         alt={restaurant.name}
@@ -28,6 +28,12 @@ const RestaurantImage = ({ restaurant }: RestaurantImageProps) => {
         className="absolute left-4 top-4 rounded-full bg-white text-foreground hover:text-white"
       >
         <ChevronLeftIcon size={20} />
+      </Button>
+      <Button
+        size="icon"
+        className="absolute right-4 top-4 rounded-full bg-slate-800"
+      >
+        <HeartIcon size={20} className="fill-white" />
       </Button>
     </div>
   );
