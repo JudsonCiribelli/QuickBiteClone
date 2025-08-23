@@ -2,6 +2,7 @@ import {
   calculateProductTotalPrice,
   formatCurrency,
 } from "@/app/_helpers/price";
+import { cn } from "@/app/_lib/utils";
 import { Prisma } from "@/app/generated/prisma";
 import { ArrowDownIcon } from "lucide-react";
 import Image from "next/image";
@@ -17,13 +18,17 @@ interface ProductItemProps {
       };
     };
   }>;
+  className?: string;
 }
 
-const ProductItem = ({ product }: ProductItemProps) => {
+const ProductItem = ({ product, className }: ProductItemProps) => {
   return (
-    <Link href={`/products/${product.id}`} className="w-[150px] space-y-2">
-      <div className="w-[150px] space-y-2">
-        <div className="relative h-[150px] w-full min-w-[150px]">
+    <Link
+      href={`/products/${product.id}`}
+      className={cn("w-[150px] min-w-[150px]", className)}
+    >
+      <div className="w-full space-y-2">
+        <div className="relative aspect-square w-full">
           <Image
             src={product.imageUrl}
             alt={product.name}
