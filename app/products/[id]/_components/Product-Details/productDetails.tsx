@@ -1,8 +1,16 @@
 "use client";
+import CartComponent from "@/app/_components/Cart-Component/cartComponent";
 import DiscountBadgeComponent from "@/app/_components/Discount-Badge-Component/discountBadgeComponent";
 import ProductListComponent from "@/app/_components/Product-List-Component/productListComponent";
 import { Button } from "@/app/_components/ui/button";
 import { Card } from "@/app/_components/ui/card";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from "@/app/_components/ui/sheet";
+import { CartContext } from "@/app/_context/cart";
 import {
   calculateProductTotalPrice,
   formatCurrency,
@@ -15,7 +23,7 @@ import {
   ClockIcon,
 } from "lucide-react";
 import Image from "next/image";
-import { useState } from "react";
+import { useContext, useState } from "react";
 
 interface ProductDetailsProps {
   product: Prisma.ProductGetPayload<{
@@ -34,6 +42,15 @@ const ProductDetails = ({
   complementaryProducts,
 }: ProductDetailsProps) => {
   const [quantity, setQuantity] = useState(1);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const { handleAddProductToCart, products } = useContext(CartContext);
+
+  console.log(products);
+
+  const addProductToCart = () => {
+    handleAddProductToCart(product, quantity);
+    setIsCartOpen(true);
+  };
 
   const handleIncreaseQuantity = () => {
     setQuantity((currencyState) => currencyState + 1);
@@ -49,107 +66,120 @@ const ProductDetails = ({
   };
 
   return (
-    <div className="relative z-50 mt-[-1.5rem] rounded-tl-3xl rounded-tr-3xl bg-white p-5">
-      {/* Restaurante */}
-      <div className="flex items-center gap-1">
-        <div className="relative h-6 w-6">
-          <Image
-            src={product.restaurant.imageUrl}
-            alt={product.restaurant.name}
-            fill
-            className="rounded-full object-cover"
-          />
-        </div>
-        <span className="text-xs text-muted-foreground">
-          {product.restaurant.name}
-        </span>
-      </div>
-
-      {/* Titulo / nome do produto */}
-
-      <h1 className="mb-2 mt-1 text-xl font-semibold">{product.name}</h1>
-      {/* Valor do produto */}
-      <div className="flex justify-between">
-        <div>
-          <div className="flex items-center gap-1">
-            <h2 className="text-xl font-semibold">
-              {formatCurrency(calculateProductTotalPrice(product))}
-            </h2>
-            {product.discountPercentage && (
-              <DiscountBadgeComponent product={product} />
-            )}
+    <>
+      <div className="relative z-50 mt-[-1.5rem] rounded-tl-3xl rounded-tr-3xl bg-white p-5">
+        {/* Restaurante */}
+        <div className="flex items-center gap-1">
+          <div className="relative h-6 w-6">
+            <Image
+              src={product.restaurant.imageUrl}
+              alt={product.restaurant.name}
+              fill
+              className="rounded-full object-cover"
+            />
           </div>
-          {product.discountPercentage > 0 && (
-            <p className="text-sm text-muted-foreground">
-              De: {formatCurrency(Number(product.price))}
-            </p>
-          )}
+          <span className="text-xs text-muted-foreground">
+            {product.restaurant.name}
+          </span>
         </div>
-        {/* Botoes */}
-        <div className="flex items-center gap-3 text-center">
-          <Button
-            size="icon"
-            variant="ghost"
-            className="border border-solid border-muted-foreground"
-            onClick={handleDecreaseQuantity}
-          >
-            <ChevronLeftIcon />
-          </Button>
-          <span className="w-4">{quantity}</span>
-          <Button size="icon" onClick={handleIncreaseQuantity}>
-            <ChevronRightIcon />
-          </Button>
-        </div>
-      </div>
-      {/* Entrega */}
-      <div className="px-5">
-        <Card className="mt-6 flex items-center justify-around py-3">
-          {/* Esquerda */}
-          <div className="items-center">
+
+        {/* Titulo / nome do produto */}
+
+        <h1 className="mb-2 mt-1 text-xl font-semibold">{product.name}</h1>
+        {/* Valor do produto */}
+        <div className="flex justify-between">
+          <div>
             <div className="flex items-center gap-1">
-              <span className="text-sm text-muted-foreground">Entrega</span>
-              <BikeIcon className="text-muted-foreground" size={14} />
+              <h2 className="text-xl font-semibold">
+                {formatCurrency(calculateProductTotalPrice(product))}
+              </h2>
+              {product.discountPercentage && (
+                <DiscountBadgeComponent product={product} />
+              )}
             </div>
-            {Number(product.restaurant.deliveryFee) > 0 ? (
-              <p className="text-sm font-semibold">
-                {formatCurrency(Number(product.restaurant.deliveryFee))}
+            {product.discountPercentage > 0 && (
+              <p className="text-sm text-muted-foreground">
+                De: {formatCurrency(Number(product.price))}
               </p>
-            ) : (
-              <p className="text-sm">Grátis</p>
             )}
           </div>
-          {/* Direita */}
-          <div className="items-center">
-            <div className="flex items-center gap-1">
-              <span className="text-sm text-muted-foreground">Entrega</span>
-              <ClockIcon
-                size={14}
-                className="text-bold text-muted-foreground"
-              />
-            </div>
-            <p className="text-sm font-semibold">
-              {product.restaurant.deliveryTimeMinutes} min
-            </p>
+          {/* Botoes */}
+          <div className="flex items-center gap-3 text-center">
+            <Button
+              size="icon"
+              variant="ghost"
+              className="border border-solid border-muted-foreground"
+              onClick={handleDecreaseQuantity}
+            >
+              <ChevronLeftIcon />
+            </Button>
+            <span className="w-4">{quantity}</span>
+            <Button size="icon" onClick={handleIncreaseQuantity}>
+              <ChevronRightIcon />
+            </Button>
           </div>
-        </Card>
-      </div>
+        </div>
+        {/* Entrega */}
+        <div className="px-5">
+          <Card className="mt-6 flex items-center justify-around py-3">
+            {/* Esquerda */}
+            <div className="items-center">
+              <div className="flex items-center gap-1">
+                <span className="text-sm text-muted-foreground">Entrega</span>
+                <BikeIcon className="text-muted-foreground" size={14} />
+              </div>
+              {Number(product.restaurant.deliveryFee) > 0 ? (
+                <p className="text-sm font-semibold">
+                  {formatCurrency(Number(product.restaurant.deliveryFee))}
+                </p>
+              ) : (
+                <p className="text-sm">Grátis</p>
+              )}
+            </div>
+            {/* Direita */}
+            <div className="items-center">
+              <div className="flex items-center gap-1">
+                <span className="text-sm text-muted-foreground">Entrega</span>
+                <ClockIcon
+                  size={14}
+                  className="text-bold text-muted-foreground"
+                />
+              </div>
+              <p className="text-sm font-semibold">
+                {product.restaurant.deliveryTimeMinutes} min
+              </p>
+            </div>
+          </Card>
+        </div>
 
-      <div className="mt-6 space-y-2">
-        <h3 className="text-lg font-semibold">Sobre</h3>
-        <p className="text-xs text-muted-foreground">{product.description}</p>
-      </div>
+        <div className="mt-6 space-y-2">
+          <h3 className="text-lg font-semibold">Sobre</h3>
+          <p className="text-xs text-muted-foreground">{product.description}</p>
+        </div>
 
-      <div className="mb-3 mt-6 space-y-2">
-        <h3 className="text-lg font-semibold">Sucos</h3>
-        <ProductListComponent products={complementaryProducts} />
-      </div>
+        <div className="mb-3 mt-6 space-y-2">
+          <h3 className="text-lg font-semibold">Sucos</h3>
+          <ProductListComponent products={complementaryProducts} />
+        </div>
 
-      <div className="mt-6 px-5">
-        <Button className="w-full py-2 font-semibold">
-          Adicionar à Sacola
-        </Button>
+        <div className="mt-6 px-5">
+          <Button
+            className="w-full py-2 font-semibold"
+            onClick={addProductToCart}
+          >
+            Adicionar à Sacola
+          </Button>
+        </div>
       </div>
-    </div>
+      <Sheet open={isCartOpen} onOpenChange={setIsCartOpen}>
+        <SheetContent>
+          <SheetHeader>
+            <SheetTitle className="text-left">Sacola</SheetTitle>
+          </SheetHeader>
+          <CartComponent />
+        </SheetContent>
+      </Sheet>
+    </>
   );
 };
 
