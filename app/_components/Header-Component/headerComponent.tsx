@@ -95,11 +95,14 @@ const HeaderComponent = () => {
                   </Button>
 
                   <Button
+                    asChild
                     variant="ghost"
                     className="w-full justify-start space-x-2 rounded-full text-sm"
                   >
-                    <ScrollTextIcon />
-                    <span className="block">Meus pedidos</span>
+                    <Link href="/my-orders">
+                      <ScrollTextIcon />
+                      <span className="block">Meus pedidos</span>
+                    </Link>
                   </Button>
 
                   <Button
