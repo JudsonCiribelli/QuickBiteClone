@@ -8,7 +8,7 @@ import { Button } from "../ui/button";
 import { createOrder } from "@/app/_actions/order";
 import { OrderStatus } from "@/app/generated/prisma";
 import { useSession } from "next-auth/react";
-import { Loader2Icon } from "lucide-react";
+import { Loader2, Loader2Icon } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -149,7 +149,13 @@ const CartComponent = () => {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancelar</AlertDialogCancel>
-            <AlertDialogAction onClick={handleFinishOrderClick}>
+            <AlertDialogAction
+              onClick={handleFinishOrderClick}
+              disabled={isSubmitLoading}
+            >
+              {isSubmitLoading && (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              )}
               Finalizar
             </AlertDialogAction>
           </AlertDialogFooter>
