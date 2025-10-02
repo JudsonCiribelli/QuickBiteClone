@@ -198,7 +198,7 @@ const ProductDetails = ({
           <SheetHeader>
             <SheetTitle className="text-left">Sacola</SheetTitle>
           </SheetHeader>
-          <CartComponent />
+          <CartComponent setIsOpen={setIsCartOpen} />
         </SheetContent>
       </Sheet>
 

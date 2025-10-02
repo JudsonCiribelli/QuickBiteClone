@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
+import { Toaster } from "@/app/_components/ui/sonner";
 import "./globals.css";
 import { CartProvider } from "./_context/cart";
 import AuthProvider from "./_providers/auth";
@@ -24,6 +25,7 @@ export default function RootLayout({
       <body className={`${poppins.className} antialiased`}>
         <AuthProvider>
           <CartProvider>{children}</CartProvider>
+          <Toaster />
         </AuthProvider>
       </body>
     </html>

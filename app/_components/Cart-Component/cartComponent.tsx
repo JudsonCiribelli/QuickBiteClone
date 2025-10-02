@@ -3,6 +3,7 @@ import { useContext, useState } from "react";
 import CartItem from "../Cart-Item/cartItem";
 import { Card, CardContent } from "../ui/card";
 import { formatCurrency } from "@/app/_helpers/price";
+import { toast } from "sonner";
 import { Separator } from "../ui/separator";
 import { Button } from "../ui/button";
 import { createOrder } from "@/app/_actions/order";
@@ -19,13 +20,23 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "../ui/alert-dialog";
+import { useRouter } from "next/navigation";
 
-const CartComponent = () => {
+interface CartProps {
+  setIsOpen: (isOpen: boolean) => void;
+}
+
+const CartComponent = ({ setIsOpen }: CartProps) => {
   const [isSubmitLoading, setIsSubmitLoading] = useState(false);
+
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
+
   const { products, totalDiscounts, totalPrice, subtotalPrice, clearCart } =
     useContext(CartContext);
+
   const { data } = useSession();
+
+  const router = useRouter();
 
   const handleFinishOrderClick = async () => {
     if (!data?.user) return;
@@ -56,6 +67,14 @@ const CartComponent = () => {
         },
       });
       clearCart();
+      setIsOpen(false);
+      toast("Pedido finalizado com sucesso!", {
+        description: "Você pode acompanhá-lo na tela dos seus pedidos!",
+        action: {
+          label: "Meus pedidos",
+          onClick: () => router.push("/my-orders"),
+        },
+      });
     } catch (error) {
       console.log(error);
     } finally {
